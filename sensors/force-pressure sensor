@@ -1,7 +1,0 @@
-The force/pressure sensor is used to measure applied mechanical force or pressure exerted on a surface and convert it into a corresponding electrical signal.
-
-This module documents:
-- Operating principle of the force/pressure sensing element
-- Interface circuitry and signal conditioning requirements
-- Calibration methodology for accurate force measurement
-- Applications in biomechanical and human–machine interaction systems
