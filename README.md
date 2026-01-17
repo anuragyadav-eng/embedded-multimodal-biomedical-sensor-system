@@ -1,2 +1,18 @@
-# Anurag-yadav
-Design and implementation of an embedded multimodal biomechanical sensor system including Electroencephalography (EEG), Electrocardiography (ECG), Electromyography (EMG), Electrooculography (EOG), Electrodermal Activity (EDA), and force/pressure sensors.
+# Embedded Multimodal Biomechanical Sensor System
+
+## Overview
+This project focuses on designing and developing an embedded system capable of acquiring multiple biomechanical and biomedical signals in real time.
+
+Integrated sensors:
+- EEG (Electroencephalography)
+- ECG (Electrocardiography)
+- EMG (Electromyography)
+- EOG (Electrooculography)
+- EDA (Electrodermal Activity)
+- Force/Pressure Sensor
+
+## Objective
+To build a low-cost, modular embedded platform for biosignal acquisition and processing.
+
+## Author
+Anurag Yadav
