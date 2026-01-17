@@ -3,7 +3,6 @@
 ## Overview
 This project focuses on designing and developing an embedded system capable of acquiring multiple biomechanical and biomedical signals in real time.
 
-Integrated sensors:
 - EEG (Electroencephalography)
 - ECG (Electrocardiography)
 - EMG (Electromyography)
