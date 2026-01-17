@@ -1,1 +1,1 @@
-
+This directory contains comprehensive system-level documentation for the embedded multimodal biomechanical sensor system, covering overall architecture, design methodology, signal acquisition workflow, and safety considerations.
