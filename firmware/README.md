@@ -1,1 +1,5 @@
-Embedded firmware for real-time acquisition and basic processing of EEG, ECG, EMG, EOG, EDA, and force/pressure sensor signals.
+This directory contains embedded firmware for the multimodal biomechanical sensor system.
+
+It includes:
+- An integrated firmware implementation for simultaneous acquisition of multiple biosignals
+- Sensor-specific firmware modules demonstrating individual signal acquisition and conditioning
