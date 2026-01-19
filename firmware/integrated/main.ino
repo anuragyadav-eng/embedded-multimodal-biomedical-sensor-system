@@ -2,40 +2,87 @@
   Embedded Multimodal Biomechanical Sensor System
   Author: Anurag Yadav
 
-  This firmware performs basic real-time acquisition of
-  multiple biosignals using analog inputs and streams
-  the data over serial communication.
+  Description:
+  This firmware performs real-time acquisition of multiple
+  biomechanical and biomedical signals using analog inputs.
+  The acquired data is streamed over serial communication
+  in CSV format for visualization and analysis.
+
+  Note:
+  All biosignals (ECG, EMG, EOG, EDA) are assumed to be
+  pre-conditioned using appropriate analog front-end circuitry
+  (instrumentation amplifiers and filters) before ADC input.
 */
 
-// Analog input pins
-#define ECG_PIN A0
-#define EMG_PIN A1
-#define EOG_PIN A2
-#define EDA_PIN A3
-#define FORCE_PIN A4
+// ---------------- Pin Configuration ----------------
+#define ECG_PIN     A0
+#define EMG_PIN     A1
+#define EOG_PIN     A2
+#define EDA_PIN     A3
+#define FORCE_PIN   A4
 
+// ---------------- Sampling Parameters ----------------
+#define SAMPLE_DELAY_MS 5      // ~200 Hz sampling rate
+#define AVG_WINDOW      4      // Moving average window size
+
+// ---------------- Variables ----------------
+int ecg_buf[AVG_WINDOW], emg_buf[AVG_WINDOW];
+int eog_buf[AVG_WINDOW], eda_buf[AVG_WINDOW], force_buf[AVG_WINDOW];
+int idx = 0;
+
+// ---------------- Function Prototypes ----------------
+int movingAverage(int *buffer);
+
+// ---------------- Setup ----------------
 void setup() {
-  Serial.begin(115200);        // Initialize serial communication
-  analogReference(DEFAULT);    // Default ADC reference
+  Serial.begin(115200);
+  analogReference(DEFAULT);
+
+  // CSV Header for data logging
+  Serial.println("ECG,EMG,EOG,EDA,FORCE");
+
+  // Initialize buffers
+  for (int i = 0; i < AVG_WINDOW; i++) {
+    ecg_buf[i] = emg_buf[i] = 0;
+    eog_buf[i] = eda_buf[i] = force_buf[i] = 0;
+  }
 }
 
+// ---------------- Main Loop ----------------
 void loop() {
-  int ecg   = analogRead(ECG_PIN);
-  int emg   = analogRead(EMG_PIN);
-  int eog   = analogRead(EOG_PIN);
-  int eda   = analogRead(EDA_PIN);
-  int force = analogRead(FORCE_PIN);
 
-  // Transmit data in CSV format
-  Serial.print(ecg);
-  Serial.print(",");
-  Serial.print(emg);
-  Serial.print(",");
-  Serial.print(eog);
-  Serial.print(",");
-  Serial.print(eda);
-  Serial.print(",");
+  // Read analog signals
+  ecg_buf[idx]   = analogRead(ECG_PIN);
+  emg_buf[idx]   = analogRead(EMG_PIN);
+  eog_buf[idx]   = analogRead(EOG_PIN);
+  eda_buf[idx]   = analogRead(EDA_PIN);
+  force_buf[idx] = analogRead(FORCE_PIN);
+
+  // Increment buffer index
+  idx = (idx + 1) % AVG_WINDOW;
+
+  // Compute averaged values
+  int ecg   = movingAverage(ecg_buf);
+  int emg   = movingAverage(emg_buf);
+  int eog   = movingAverage(eog_buf);
+  int eda   = movingAverage(eda_buf);
+  int force = movingAverage(force_buf);
+
+  // Transmit data (CSV format)
+  Serial.print(ecg);   Serial.print(",");
+  Serial.print(emg);   Serial.print(",");
+  Serial.print(eog);   Serial.print(",");
+  Serial.print(eda);   Serial.print(",");
   Serial.println(force);
 
-  delay(5);   // Sampling delay (~200 Hz)
+  delay(SAMPLE_DELAY_MS);
+}
+
+// ---------------- Moving Average Filter ----------------
+int movingAverage(int *buffer) {
+  long sum = 0;
+  for (int i = 0; i < AVG_WINDOW; i++) {
+    sum += buffer[i];
+  }
+  return sum / AVG_WINDOW;
 }
