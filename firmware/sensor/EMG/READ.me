@@ -1,0 +1,26 @@
+const int emgPin = A0;
+const int ledPin = 8;
+
+const int THRESHOLD = 650;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  int raw = analogRead(emgPin);
+
+  if (raw < THRESHOLD) {
+    // Below 650 → flat line
+    Serial.println(500);          // constant value → single line
+    digitalWrite(ledPin, LOW);    // LED OFF
+  } 
+  else {
+    // Above 650 → flickering EMG
+    Serial.println(raw);          // raw EMG → flicker
+    digitalWrite(ledPin, HIGH);   // LED ON
+  }
+
+  delayMicroseconds(1000); // ~1 kHz
+}
