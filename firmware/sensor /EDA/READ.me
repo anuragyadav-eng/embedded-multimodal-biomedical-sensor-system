@@ -1,0 +1,59 @@
+// EDA-based Pain Response Indicator
+// Voltage ranges exactly as specified
+
+const int edaPin = A0;
+const int leds[5] = {8, 9, 10, 11, 12};
+
+float filtered = 0;
+
+void setup() {
+  Serial.begin(9600);
+
+  for (int i = 0; i < 5; i++) {
+    pinMode(leds[i], OUTPUT);
+  }
+}
+
+void loop() {
+  int raw = analogRead(edaPin);
+  float voltage = raw * (5.0 / 1023.0);
+
+  // Strong low-pass filter for EDA (reduces fluctuation)
+  filtered = 0.97 * filtered + 0.03 * voltage;
+
+  Serial.println(filtered);
+
+  // Turn OFF all LEDs
+  for (int i = 0; i < 5; i++) {
+    digitalWrite(leds[i], LOW);
+  }
+
+  // Pain level indication based on voltage
+  if (filtered >= 2.4 && filtered < 2.6) {
+    digitalWrite(leds[0], HIGH);                          // Relaxed
+  }
+  else if (filtered >= 2.6 && filtered < 2.75) {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);                          // Mild
+  }
+  else if (filtered >= 2.75 && filtered < 2.9) {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);                          // Moderate
+  }
+  else if (filtered >= 2.9 && filtered < 3.1) {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+    digitalWrite(leds[3], HIGH);                          // High
+  }
+  else if (filtered >= 3.1) {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+    digitalWrite(leds[3], HIGH);
+    digitalWrite(leds[4], HIGH);                          // Severe
+  }
+
+  delay(50);
+}
