@@ -1,0 +1,22 @@
+const int eogPin = A0;
+float baseline = 0;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(eogPin, INPUT);
+
+  // Baseline calibration
+  for (int i = 0; i < 100; i++) {
+    baseline += analogRead(eogPin);
+    delay(10);
+  }
+  baseline /= 100.0;
+}
+
+void loop() {
+  int rawValue = analogRead(eogPin);
+  float eogSignal = rawValue - baseline;
+
+  Serial.println(eogSignal);
+  delay(10);
+}
