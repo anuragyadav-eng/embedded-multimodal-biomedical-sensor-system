@@ -34,9 +34,9 @@ visualized or stored for further analysis.
 - ECG Sensor: Completed
 - EMG Sensor: Completed
 - Force / Pressure Sensor: Completed
-- EEG Sensor: In Progress
-- EOG Sensor: In Progress
-- EDA Sensor: In Progress
+- EEG Sensor: In Progress 
+- EOG Sensor: Completed
+- EDA Sensor: Completed
 
 ## Applications
 - Biomedical signal education and laboratory experiments
